@@ -1,0 +1,90 @@
+                     syntax = "proto3";
+
+package greet;
+
+// The greeting service definition.
+service Greeter {
+	// Unary
+	rpc SayHello (HelloRequest) returns (HelloReply);
+
+	// Server Streaming
+	rpc ParrotSaysHello (HelloRequest) returns (stream HelloReply);
+
+	// Client Streaming
+	rpc ChattyClientSaysHello (stream HelloRequest) returns (DelayedReply);
+
+	// Both Streaming
+	rpc InteractingHello (stream HelloRequest) returns (stream HelloReply);
+	// fetches rover with map string
+  rpc FetchMap(Empty) returns (RoverMap) {}
+
+  // runs an instantiated rover with commands
+  rpc FetchCommands(RoverNumber) returns (RoverCommands) {}
+
+  // given a mine location, get the corresponding serial number
+  rpc GetMineSerialNumber(MineNumber) returns (MineSerialNumber) {}
+
+  // lets the server know the result
+  rpc NotifyRoverStatus(RoverStatus) returns (Empty) {}
+
+  // shares decoded mine pin back to server
+  rpc NotifyDisarmedMine(MineDisarmed) returns (Empty) {}
+
+  rpc PrintPin (Pin) returns (Empty) {}
+
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+  string greeting = 2;
+}
+
+// The response message containing the greetings.
+message HelloReply {
+  string message = 1;
+}
+
+message DelayedReply {
+	string message = 1;
+	repeated HelloRequest request = 2;
+}
+
+
+message Empty {}
+
+message RoverNumber {
+  uint32 num = 1;
+}
+
+message RoverCommands {
+  bool hasCommands = 1;
+  string commands = 2;
+}
+
+message RoverMap {
+  string data = 1;
+}
+
+message MineNumber {
+  uint32 i = 1;
+  uint32 j = 2;
+}
+
+message MineSerialNumber {
+  string serialNumber = 1;
+}
+
+message MineDisarmed {
+  string serialNumber = 1;
+  uint32 pin = 2;
+}
+
+message RoverStatus {
+  uint32 num = 1;
+  bool hasExploded = 2;
+}
+
+message Pin {
+  uint64 value = 1;
+}
